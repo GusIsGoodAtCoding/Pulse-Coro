@@ -90,7 +90,7 @@
         #hud { position: absolute; top: 20px; left: 20px; display: none; z-index: 10; font-family: 'Arial Black', sans-serif;}
         #comboDisplay { font-size: 2.5rem; color: #fff; text-shadow: 0 0 15px #fff; margin-bottom: 5px; font-style: italic; transition: transform 0.05s ease-out; transform-origin: left center;}
         .life-bar { display: inline-block; width: 30px; height: 10px; background: #00ffff; margin-right: 5px; box-shadow: 0 0 10px #00ffff; transform: skewX(-20deg); transition: 0.3s;}
-        .life-lost { background: #333; box-shadow: none; }
+        .life-lost { background: #333 !important; box-shadow: none !important; }
         .life-lost.breaking { animation: lifeLoss 0.4s ease-out; }
         #modeDisplay { font-size: 1rem; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 2px;}
     </style>
@@ -426,16 +426,19 @@
 
             for(let i=1; i<=3; i++) {
                 let el = document.getElementById('life' + i);
-                el.style.background = themeColor;
-                el.style.boxShadow = `0 0 10px ${themeColor}`;
-                // Update visual state based on current lives
+                // Check if this life should be lost
                 if (i > lives) {
+                    // This life is lost - apply gray permanently
                     if (!el.classList.contains('life-lost')) {
                         el.classList.add('life-lost', 'breaking');
+                        // Remove breaking animation class after it finishes
                         setTimeout(() => el.classList.remove('breaking'), 400);
                     }
                 } else {
+                    // This life is active - restore colors
                     el.classList.remove('life-lost', 'breaking');
+                    el.style.background = themeColor;
+                    el.style.boxShadow = `0 0 10px ${themeColor}`;
                 }
             }
         }
